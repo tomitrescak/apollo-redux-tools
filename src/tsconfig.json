@@ -1,0 +1,59 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "outDir": "..",
+    "suppressImplicitAnyIndexErrors": true,
+    "jsx": "preserve",
+    "experimentalDecorators": true,
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true
+  },
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2,
+    "convertTabsToSpaces": true,
+    "insertSpaceAfterCommaDelimiter": true,
+    "insertSpaceAfterSemicolonInForStatements": true,
+    "insertSpaceBeforeAndAfterBinaryOperators": true,
+    "insertSpaceAfterKeywordsInControlFlowStatements": true,
+    "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+    "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "placeOpenBraceOnNewLineForFunctions": false,
+    "placeOpenBraceOnNewLineForControlBlocks": false
+  },
+  "filesGlob": [
+    "!./node_modules/**",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "./**/node_modules"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  },
+  "files": [
+    "client/apollo.ts",
+    "client/index.ts",
+    "client/redux.ts",
+    "index.ts",
+    "server/empty.ts",
+    "typings/apollo.d.ts",
+    "typings/main.d.ts",
+    "typings/main/ambient/es6-shim/index.d.ts",
+    "typings/mantra.d.ts",
+    "typings/meteor-extras.d.ts",
+    "typings/meteor/meteor.d.ts",
+    "typings/react/react-dom.d.ts",
+    "typings/react/react.d.ts",
+    "client/apollo_layout.tsx"
+  ]
+}

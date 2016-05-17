@@ -1,0 +1,19 @@
+{
+  "name": "meteor-ratools",
+  "version": "1.0.1",
+  "description": "Meteor tools for Redux and Apollo",
+  "main": "client/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "typings": "./config/index.d.ts",
+  "keywords": [
+    "meteor",
+    "redux",
+    "apollo"
+  ],
+  "author": "Tomi Trescak <tomi.trescak@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
