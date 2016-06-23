@@ -1,19 +1,20 @@
 {
-  "name": "meteor-ratools",
-  "version": "1.0.1",
-  "description": "Meteor tools for Redux and Apollo",
-  "main": "client/index.js",
+  "name": "apollo-mantra",
+  "version": "1.0.0",
+  "description": "Tools for integration of apollo with Mantra",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "typings": "./config/index.d.ts",
   "keywords": [
-    "meteor",
-    "redux",
-    "apollo"
+    "Apollo",
+    "Mantra",
+    "Meteor"
   ],
-  "author": "Tomi Trescak <tomi.trescak@gmail.com>",
+  "author": "Tomi Trescak",
   "license": "MIT",
   "dependencies": {
+    "mantra-core": "^1.6.1",
+    "react-apollo": "^0.3.9"
   }
 }

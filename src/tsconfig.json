@@ -8,12 +8,13 @@
     "removeComments": false,
     "noLib": false,
     "preserveConstEnums": true,
-    "outDir": "..",
+    "outDir": "../dist",
     "suppressImplicitAnyIndexErrors": true,
     "jsx": "preserve",
     "experimentalDecorators": true,
     "sourceMap": false,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "classic"
   },
   "formatCodeOptions": {
     "indentSize": 2,
@@ -41,19 +42,14 @@
     "rewriteTsconfig": true
   },
   "files": [
-    "client/apollo.ts",
+    "client/config.ts",
+    "client/connect.ts",
     "client/index.ts",
-    "client/redux.ts",
-    "index.ts",
-    "server/empty.ts",
-    "typings/apollo.d.ts",
-    "typings/main.d.ts",
-    "typings/main/ambient/es6-shim/index.d.ts",
-    "typings/mantra.d.ts",
-    "typings/meteor-extras.d.ts",
-    "typings/meteor/meteor.d.ts",
-    "typings/react/react-dom.d.ts",
-    "typings/react/react.d.ts",
-    "client/apollo_layout.tsx"
+    "client/mutation.ts",
+    "client/query.ts",
+    "server_orig/index.ts",
+    "server_orig/schema.ts",
+    "server/schema.ts",
+    "client/loading_container.tsx"
   ]
 }

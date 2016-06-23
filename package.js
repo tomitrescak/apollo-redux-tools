@@ -1,8 +1,8 @@
 Package.describe({
-  name: 'tomi:apollo-redux-tools',
+  name: 'tomi:apollo-mantra',
   version: '0.0.1',
   // Brief, one-line summary of the package.
-  summary: 'Tools for fast and easy apollo and redux',
+  summary: 'Tools for fast and easy apollo with mantra',
   // URL to the Git repository containing the source code for this package.
   git: '',
   // By default, Meteor will default to using README.md for documentation.
@@ -15,8 +15,8 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use('modules');
   api.use('promise');
-  api.mainModule('./client/index.js', 'client');
-  api.mainModule('./server/index.js', 'server');
+  api.mainModule('./dist/client/index.js', 'client');
+  api.mainModule('./dist/server/index.js', 'server');
 });
 
 Package.onTest(function(api) {
