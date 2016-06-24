@@ -1,12 +1,17 @@
 import config from './config';
 
-export function loadingContainer(component: any, loadingView: any | string[], keys = ['data']) {
+export function loadingContainer(component: any, loadingView: any | string[], keys = ['data'], dispatch: Function) {
   if (Array.isArray(loadingView)) {
     keys = loadingView;
+    loadingView = null;
   }
 
   return function(props: any) {
     for (let key of keys) {
+      if (!props[key]) {
+        console.error('Key does not exist in the apollo result set: ' + key);
+      }
+
       if (props[key].errors) {
         if (Array.isArray(props[key].errors)) {
           for (let error of props[key].errors) {

@@ -1,5 +1,5 @@
 import config from './config';
-export function loadingContainer(component, loadingView, keys = ['data']) {
+export function loadingContainer(component, loadingView, keys = ['data'], dispatch) {
     if (Array.isArray(loadingView)) {
         keys = loadingView;
         loadingView = null;
