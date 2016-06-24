@@ -11,4 +11,4 @@ export { default as connect } from './connect';
 export { default as mutation } from './mutation';
 export { default as query } from './query';
 export { loadingContainer } from './loading_container';
-export { isQuery } from './reducer_extensions';
+export { isQuery, getQuery, isMutation, getMutation } from './reducer_extensions';
