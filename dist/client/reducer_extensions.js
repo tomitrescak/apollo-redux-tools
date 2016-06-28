@@ -1,6 +1,6 @@
 const QUERY_INIT = 'APOLLO_QUERY_INIT';
 const QUERY_RESULT = 'APOLLO_QUERY_RESULT';
-const QUERY_RESULT_CLIENT = 'APOLLO_QUERY_RESULT_CLIENT';
+//const QUERY_RESULT_CLIENT = 'APOLLO_QUERY_RESULT_CLIENT';
 const MUTATION_INIT = 'APOLLO_MUTATION_INIT';
 const MUTATION_RESULT = 'APOLLO_MUTATION_RESULT';
 const queryMappings = {};
@@ -26,10 +26,21 @@ export function getQuery(action) {
             queryMappings[action.queryId] = matchQueryName(action.queryString);
         }
     }
-    else if (action.type === QUERY_RESULT || action.type === QUERY_RESULT_CLIENT) {
+    else if (action.type === QUERY_RESULT) {
         return queryMappings[action.queryId];
     }
     return null;
+}
+export function copyQuery(state, stateKey, queryResult, queryKey = '_id') {
+    if (queryResult) {
+        // query maps
+        const newKeys = Object.assign({}, state[stateKey]);
+        // copy all exercises to the new state
+        queryResult.forEach((e) => {
+            newKeys[e[queryKey]] = e;
+        });
+        return Object.assign({}, state, { [stateKey]: newKeys });
+    }
 }
 // mutations
 function matchMutationName(qs) {

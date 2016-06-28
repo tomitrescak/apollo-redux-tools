@@ -14,12 +14,12 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
                 thenCallback(data, dispatch, state);
             }
             if (errors && errorCallback) {
-                showMessage('Error', errors);
+                showMessage('Error', errors.map((e) => e.message));
                 errorCallback(errors, dispatch, state);
                 console.error(errors);
             }
         }).catch((error) => {
-            showMessage('Error', error);
+            showMessage('Error', error.message ? (error.message + error.stack) : error);
             if (catchCallback) {
                 catchCallback(error, dispatch, state);
             }
@@ -28,7 +28,7 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
         return null;
     };
 }
-function showMessage(title, text, type = 'error') {
+export function showMessage(title, text, type = 'error') {
     if (sweetalert) {
         sweetalert({ title: title, text: text, type: type, confirmButtonText: 'OK' });
     }

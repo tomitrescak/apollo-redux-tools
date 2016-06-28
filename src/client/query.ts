@@ -1,6 +1,6 @@
 import config from './config';
 import sweetalert from 'sweetalert';
-
+import { showMessage } from './mutation';
 declare var gql: any;
 
 
@@ -43,12 +43,4 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
     });
     return null;
   };
-}
-
-function showMessage(title: string, text: string, type = 'error') {
-  if (sweetalert) {
-    sweetalert({title: title, text: text, type: type, confirmButtonText: 'OK' });
-  } else {
-    alert(`${title}: ${text}`);
-  }
 }

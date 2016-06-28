@@ -1,10 +1,11 @@
+import * as React from 'react';
 import config from './config';
-export function loadingContainer(component, loadingView, keys = ['data']) {
-    if (Array.isArray(loadingView)) {
-        keys = loadingView;
-        loadingView = null;
+export function loadingContainer(Component, LoadingView, keys = ['data']) {
+    if (Array.isArray(LoadingView)) {
+        keys = LoadingView;
+        LoadingView = null;
     }
-    return function (props) {
+    return (props) => {
         for (let key of keys) {
             if (!props[key]) {
                 console.error('Key does not exist in the apollo result set: ' + key);
@@ -19,15 +20,17 @@ export function loadingContainer(component, loadingView, keys = ['data']) {
                     }
                 }
                 else {
-                    console.error(props[key].errors);
+                    let m = props[key].errors;
+                    //console.error(m.message);
+                    console.error(m.stack);
                 }
             }
             if (props[key].loading) {
-                return loadingView ? loadingView(props) : config.loadingComponent(props);
+                return LoadingView ? <LoadingView {...props}/> : <config.loadingComponent {...props}/>;
             }
         }
         try {
-            return component(props);
+            return <Component {...props}/>;
         }
         catch (ex) {
             console.error(ex.stack);

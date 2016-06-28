@@ -1,5 +1,8 @@
+const defaultLoading = (props) => {
+    throw new Error('Please initialise default loading components or specify one');
+};
 export default {
     context: null,
-    loadingComponent: (props) => { throw new Error('Please initialise default loading components or specify one'); },
+    loadingComponent: defaultLoading,
     apolloClient: null
 };

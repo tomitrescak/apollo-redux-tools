@@ -1,6 +1,6 @@
 const QUERY_INIT = 'APOLLO_QUERY_INIT';
 const QUERY_RESULT = 'APOLLO_QUERY_RESULT';
-const QUERY_RESULT_CLIENT = 'APOLLO_QUERY_RESULT_CLIENT';
+//const QUERY_RESULT_CLIENT = 'APOLLO_QUERY_RESULT_CLIENT';
 
 const MUTATION_INIT = 'APOLLO_MUTATION_INIT';
 const MUTATION_RESULT = 'APOLLO_MUTATION_RESULT';
@@ -32,10 +32,22 @@ export function getQuery(action: any) {
       // add query with that name into the query index
       queryMappings[action.queryId] = matchQueryName(action.queryString);
     }
-  } else if (action.type === QUERY_RESULT || action.type === QUERY_RESULT_CLIENT) {
+  } else if (action.type === QUERY_RESULT) { // || action.type === QUERY_RESULT_CLIENT) {
     return queryMappings[action.queryId];
   }
   return null;
+}
+
+export function copyQuery(state: Object, stateKey: string, queryResult: Object[], queryKey = '_id'): Object {
+  if (queryResult) {
+    // query maps
+    const newKeys = Object.assign({}, state[stateKey]);
+    // copy all exercises to the new state
+    queryResult.forEach((e) => {
+      newKeys[e[queryKey]] = e;
+    });
+    return Object.assign({}, state, { [stateKey]: newKeys });
+  }
 }
 
 // mutations

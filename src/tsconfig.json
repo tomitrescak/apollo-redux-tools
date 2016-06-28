@@ -51,6 +51,8 @@
     "server_orig/index.ts",
     "server_orig/schema.ts",
     "server/schema.ts",
+    "typings/globals/react/index.d.ts",
+    "typings/index.d.ts",
     "client/loading_container.tsx"
   ]
 }

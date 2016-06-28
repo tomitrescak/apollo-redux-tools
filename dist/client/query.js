@@ -1,5 +1,5 @@
 import config from './config';
-import sweetalert from 'sweetalert';
+import { showMessage } from './mutation';
 export default function ({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback }) {
     return (dispatch, state) => {
         if (optimisticCallback) {
@@ -27,12 +27,4 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
         });
         return null;
     };
-}
-function showMessage(title, text, type = 'error') {
-    if (sweetalert) {
-        sweetalert({ title: title, text: text, type: type, confirmButtonText: 'OK' });
-    }
-    else {
-        alert(`${title}: ${text}`);
-    }
 }

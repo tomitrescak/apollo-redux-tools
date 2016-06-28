@@ -1,12 +1,13 @@
+import * as React from 'react';
 import config from './config';
 
-export function loadingContainer(component: any, loadingView: any | string[], keys = ['data'], dispatch: Function) {
-  if (Array.isArray(loadingView)) {
-    keys = loadingView;
-    loadingView = null;
+export function loadingContainer(Component: React.StatelessComponent<any>, LoadingView: React.StatelessComponent<any>, keys: any = ['data']) {
+  if (Array.isArray(LoadingView)) {
+    keys = LoadingView;
+    LoadingView = null;
   }
 
-  return function(props: any) {
+  return (props: any) => {
     for (let key of keys) {
       if (!props[key]) {
         console.error('Key does not exist in the apollo result set: ' + key);
@@ -21,15 +22,18 @@ export function loadingContainer(component: any, loadingView: any | string[], ke
             console.error(error);
           }
         } else {
-          console.error(props[key].errors);
+          let m = props[key].errors;
+          //console.error(m.message);
+          console.error(m.stack);
+          //console.error(m);
         }
       }
       if (props[key].loading) {
-        return  loadingView ?  loadingView(props) : config.loadingComponent(props);
+        return LoadingView ?  <LoadingView {...props} /> : <config.loadingComponent {...props} />;
       }
     }
     try {
-      return component(props);
+      return <Component {...props} /> ;
     } catch (ex) {
       console.error(ex.stack);
       throw ex;
