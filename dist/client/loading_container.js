@@ -1,3 +1,11 @@
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 import * as React from 'react';
 import config from './config';
 export function loadingContainer(Component, LoadingView, keys = ['data']) {
@@ -21,16 +29,25 @@ export function loadingContainer(Component, LoadingView, keys = ['data']) {
                 }
                 else {
                     let m = props[key].errors;
-                    //console.error(m.message);
-                    console.error(m.stack);
+                    if (m.networkError) {
+                        console.error(m.networkError.message);
+                        console.error(m.networkError.stack);
+                    }
+                    else if (m.message) {
+                        console.error(m.message);
+                        console.error(m.stack);
+                    }
+                    else {
+                        console.error(m);
+                    }
                 }
             }
             if (props[key].loading) {
-                return LoadingView ? <LoadingView {...props}/> : <config.loadingComponent {...props}/>;
+                return LoadingView ? React.createElement(LoadingView, __assign({}, props)) : React.createElement(config.loadingComponent, __assign({}, props));
             }
         }
         try {
-            return <Component {...props}/>;
+            return React.createElement(Component, __assign({}, props));
         }
         catch (ex) {
             console.error(ex.stack);

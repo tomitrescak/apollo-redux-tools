@@ -1,5 +1,5 @@
 import config from './config';
-import sweetalert from 'sweetalert';
+import sweetalert from 'sweetalert2';
 export default function ({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback }) {
     return (dispatch, state) => {
         if (optimisticCallback) {
@@ -13,10 +13,12 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
             if (data && thenCallback) {
                 thenCallback(data, dispatch, state);
             }
-            if (errors && errorCallback) {
-                showMessage('Error', errors.map((e) => e.message));
-                errorCallback(errors, dispatch, state);
+            if (errors) {
+                showMessage('Error', errors.map((e) => e.message).join('\n'));
                 console.error(errors);
+                if (errorCallback) {
+                    errorCallback(errors, dispatch, state);
+                }
             }
         }).catch((error) => {
             showMessage('Error', error.message ? (error.message + error.stack) : error);
@@ -24,6 +26,7 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
                 catchCallback(error, dispatch, state);
             }
             console.error(error);
+            console.error(error.stack);
         });
         return null;
     };

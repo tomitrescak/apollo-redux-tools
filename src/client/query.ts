@@ -1,5 +1,5 @@
 import config from './config';
-import sweetalert from 'sweetalert';
+import sweetalert from 'sweetalert2';
 import { showMessage } from './mutation';
 declare var gql: any;
 

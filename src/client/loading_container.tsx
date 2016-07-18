@@ -23,9 +23,15 @@ export function loadingContainer(Component: React.StatelessComponent<any>, Loadi
           }
         } else {
           let m = props[key].errors;
-          //console.error(m.message);
-          console.error(m.stack);
-          //console.error(m);
+          if (m.networkError) {
+            console.error(m.networkError.message);
+            console.error(m.networkError.stack);
+          } else if (m.message) {
+            console.error(m.message);
+            console.error(m.stack);
+          } else {
+            console.error(m);
+          }
         }
       }
       if (props[key].loading) {

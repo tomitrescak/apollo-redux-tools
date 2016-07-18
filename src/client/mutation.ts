@@ -1,5 +1,5 @@
 import config from './config';
-import sweetalert from 'sweetalert';
+import sweetalert from 'sweetalert2';
 
 declare var gql: any;
 
@@ -29,10 +29,12 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
         thenCallback(data, dispatch, state);
       }
 
-      if (errors && errorCallback) {
-        showMessage('Error', errors.map((e: any) => e.message));
-        errorCallback(errors, dispatch, state);
+      if (errors) {
+        showMessage('Error', errors.map((e: any) => e.message).join('\n'));
         console.error(errors);
+        if (errorCallback) {
+          errorCallback(errors, dispatch, state);
+        }
       }
     }).catch((error: any) => {
       showMessage('Error', error.message ? (error.message + error.stack) : error);
@@ -40,6 +42,7 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
         catchCallback(error, dispatch, state);
       }
       console.error(error);
+      console.error(error.stack);
     });
     return null;
   };

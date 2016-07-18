@@ -10,7 +10,7 @@
     "preserveConstEnums": true,
     "outDir": "../dist",
     "suppressImplicitAnyIndexErrors": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "experimentalDecorators": true,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
@@ -42,17 +42,22 @@
     "rewriteTsconfig": true
   },
   "files": [
+    "client/compose.ts",
     "client/config.ts",
     "client/connect.ts",
+    "client/helpers.ts",
     "client/index.ts",
     "client/mutation.ts",
     "client/query.ts",
     "client/reducer_extensions.ts",
     "server_orig/index.ts",
     "server_orig/schema.ts",
+    "server/helpers.ts",
+    "server/index.ts",
     "server/schema.ts",
     "typings/globals/react/index.d.ts",
     "typings/index.d.ts",
+    "typings/mantra-core.d.ts",
     "client/loading_container.tsx"
   ]
 }

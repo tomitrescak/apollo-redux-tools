@@ -8,7 +8,10 @@ export function createApp(context, options) {
     return createMantraApp(context);
 }
 export { default as connect } from './connect';
+export { default as compose } from './compose';
+export { composeAll } from 'mantra-core';
 export { default as mutation } from './mutation';
 export { default as query } from './query';
 export { loadingContainer } from './loading_container';
 export { isQuery, getQuery, isMutation, getMutation, copyQuery } from './reducer_extensions';
+export { queriesFinished } from './helpers';
