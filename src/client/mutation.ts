@@ -11,9 +11,10 @@ interface IMutation {
   thenCallback: (data: any, dispatch: Function, state: () => any) => void;
   errorCallback: (errors: any, dispatch: Function, state: () => any) => void;
   catchCallback: (error: any, dispatch: Function, state: () => any) => void;
+  finalCallback: (dispatch: Function, state: () => any) => void;
 }
 
-export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback }: IMutation) {
+export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback }: IMutation) {
   return (dispatch: Function, state: () => any): any => {
     if (optimisticCallback) {
       optimisticCallback(dispatch, state);
@@ -36,6 +37,10 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
           errorCallback(errors, dispatch, state);
         }
       }
+
+      if (finalCallback) {
+        finalCallback(dispatch, state);
+      }
     }).catch((error: any) => {
       showMessage('Error', error.message ? (error.message + error.stack) : error);
       if (catchCallback) {
@@ -43,6 +48,10 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
       }
       console.error(error);
       console.error(error.stack);
+
+      if (finalCallback) {
+        finalCallback(dispatch, state);
+      }
     });
     return null;
   };

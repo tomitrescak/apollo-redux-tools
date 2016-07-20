@@ -1,30 +1,28 @@
 import config from './config';
-import sweetalert from 'sweetalert2';
+import { showMessage } from './mutation';
 export default function ({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback }) {
     return (dispatch, state) => {
         if (optimisticCallback) {
             optimisticCallback(dispatch, state);
         }
-        config.apolloClient.mutate({
-            mutation: gql `${query}`,
+        config.apolloClient.query({
+            query: gql `${query}`,
             variables: variables
         }).then((graphQLResult) => {
             const { errors, data } = graphQLResult;
             if (data && thenCallback) {
                 thenCallback(data, dispatch, state);
             }
-            if (errors) {
-                showMessage('Error', errors.map((e) => e.message).join('\n'));
+            if (errors && errorCallback) {
+                showMessage('Error', errors);
+                errorCallback(errors, dispatch, state);
                 console.error(errors);
-                if (errorCallback) {
-                    errorCallback(errors, dispatch, state);
-                }
             }
             if (finalCallback) {
                 finalCallback(dispatch, state);
             }
         }).catch((error) => {
-            showMessage('Error', error.message ? (error.message + error.stack) : error);
+            showMessage('Error', error);
             if (catchCallback) {
                 catchCallback(error, dispatch, state);
             }
@@ -36,12 +34,4 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
         });
         return null;
     };
-}
-export function showMessage(title, text, type = 'error') {
-    if (sweetalert) {
-        sweetalert({ title: title, text: text, type: type, confirmButtonText: 'OK' });
-    }
-    else {
-        alert(`${title}: ${text}`);
-    }
 }

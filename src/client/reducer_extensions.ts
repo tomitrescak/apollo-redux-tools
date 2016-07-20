@@ -26,28 +26,34 @@ export function isQuery(action: any, name: String) {
   return getQuery(action) === name;
 }
 
-export function stripTypeNames(obj: any) {
+export function stripTypeNames(inputObj: any) {
+  const obj = Object.assign({}, inputObj);
+
   if (obj.__typename) {
     delete (obj.__typename);
   }
 
   for (let t in obj) {
+
     // strip typename from the object
-    if (obj[t] && obj[t].__typename) {
-      const n = obj[t];
-      delete (n.__typename);
-    }
+    // if (obj[t] && obj[t].__typename) {
+    //   const n = obj[t];
+    //   delete (n.__typename);
+    // }
 
     // if the variable is object continue there
-    if (obj[t] && typeof obj[t] === 'object') {
-      stripTypeNames(obj[t]);
+
+    if (!Array.isArray(obj[t]) && obj[t] && typeof obj[t] === 'object') {
+      obj[t] = stripTypeNames(obj[t]);
     }
 
     // if variable is array, process all children
     if (Array.isArray(obj[t])) {
+      let na: any[] = [];
       for (let el of obj[t]) {
-        stripTypeNames(el);
+        na.push(stripTypeNames(el));
       }
+      obj[t] = na;
     }
   }
   return obj;
