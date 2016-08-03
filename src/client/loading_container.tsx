@@ -1,13 +1,22 @@
 import * as React from 'react';
 import config from './config';
+import { queriesFinished } from './helpers';
 
-export function loadingContainer(Component: React.StatelessComponent<any>, LoadingView: React.StatelessComponent<any>, keys: any = ['data']) {
+export function loadingContainer(Component: React.StatelessComponent<any>, LoadingView: React.StatelessComponent<any>, keys: any = ['data'], waitForAll = true) {
   if (Array.isArray(LoadingView)) {
     keys = LoadingView;
     LoadingView = null;
   }
 
   return (props: any) => {
+    // check if all queries has finished
+    if (waitForAll && config.store) {
+      if (!queriesFinished(config.store.getState().apollo)) {
+        return LoadingView ?  <LoadingView {...props} /> : <config.loadingComponent {...props} />;
+      }
+    }
+
+    // wait for individual queries
     for (let key of keys) {
       if (!props[key]) {
         console.error('Key does not exist in the apollo result set: ' + key);

@@ -57,7 +57,7 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
   };
 }
 
-export function showMessage(title: string, text: string, type = 'error') {
+export function showMessage(title: string, text: string, type: any = 'error') {
   if (sweetalert) {
     sweetalert({title: title, text: text, type: type, confirmButtonText: 'OK' });
   } else {

@@ -8,5 +8,6 @@ const defaultLoading: React.StatelessComponent<any> =
 export default {
   context: null,
   loadingComponent: defaultLoading,
-  apolloClient: null
+  apolloClient: null,
+  store: null,
 };

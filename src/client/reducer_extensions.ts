@@ -51,7 +51,11 @@ export function stripTypeNames(inputObj: any) {
     if (Array.isArray(obj[t])) {
       let na: any[] = [];
       for (let el of obj[t]) {
-        na.push(stripTypeNames(el));
+        if (typeof el === 'object') {
+          na.push(stripTypeNames(el));
+        } else {
+          na.push(el);
+        }
       }
       obj[t] = na;
     }

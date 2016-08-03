@@ -1,18 +1,19 @@
-import { createApp as createMantraApp } from 'mantra-core';
+// import { createApp as createMantraApp } from 'mantra-core';
 import config from './config';
 
-export function createApp(context: any, options: { loadingComponent: any, apolloClient: any }) {
+export function createApp(context: any, options: { loadingComponent: any, apolloClient: any, store: any }) {
   // assign context
   config.context = context;
   config.loadingComponent = options.loadingComponent;
   config.apolloClient = options.apolloClient;
+  config.store = options.store;
 
-  return createMantraApp(context);
+  // return createMantraApp(context);
 }
 
 export { default as connect } from './connect';
-export { default as compose } from './compose';
-export { composeAll } from 'mantra-core';
+// export { default as compose } from './compose';
+// export { composeAll } from 'mantra-core';
 export { default as mutation } from './mutation';
 export { default as query } from './query';
 export { loadingContainer } from './loading_container';
