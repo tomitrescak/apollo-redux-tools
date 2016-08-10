@@ -44,8 +44,16 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
       if (catchCallback) {
         catchCallback(error, dispatch, state);
       }
-      console.error(error);
-      console.error(error.stack);
+
+      if (error.networkError) {
+        console.error(error.networkError);
+        console.error(error.networkError.stack);
+      } else {
+        console.error(error);
+        console.error(error.stack);
+      }
+
+      
 
       if (finalCallback) {
         finalCallback(dispatch, state);

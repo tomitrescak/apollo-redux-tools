@@ -77,23 +77,30 @@ export function getQuery(action: any) {
 
 export function copyQuery(state: Object, stateKey: string, queryResult: Object | Object[], queryKey = '_id', overwrite = true): Object {
   if (queryResult) {
-    // query maps
-    const newKeys = Object.assign({}, state[stateKey]);
-    // copy all results to the new state
-    if (Array.isArray(queryResult)) {
-      queryResult.forEach((e) => {
-        if (overwrite || !newKeys[e[queryKey]]) {
-          newKeys[e[queryKey]] = stripTypeNames(e);
+    let newKeys: any = queryResult;
+
+    if (queryKey) {
+      // query maps
+      newKeys = Object.assign({}, state[stateKey]);
+      // copy all results to the new state
+      if (Array.isArray(queryResult)) {
+        if (queryResult.length === 0) {
+          return state;
         }
-      });
-    } else {
-      if (overwrite || !newKeys[queryResult[queryKey]]) {
-        newKeys[queryResult[queryKey]] = stripTypeNames(queryResult);
+        queryResult.forEach((e) => {
+          if (overwrite || !newKeys[e[queryKey]]) {
+            newKeys[e[queryKey]] = stripTypeNames(e);
+          }
+        });
+      } else {
+        if (overwrite || !newKeys[queryResult[queryKey]]) {
+          newKeys[queryResult[queryKey]] = stripTypeNames(queryResult);
+        }
       }
     }
     return Object.assign({}, state, { [stateKey]: newKeys });
   } else {
-    console.warn('When copying query, there was no result for: ' + stateKey);
+    // console.warn('When copying query, there was no result for: ' + stateKey);
     return state;
   }
 }

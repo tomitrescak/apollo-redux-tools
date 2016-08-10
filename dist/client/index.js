@@ -1,26 +1,30 @@
 "use strict";
-var mantra_core_1 = require('mantra-core');
+// import { createApp as createMantraApp } from 'mantra-core';
 var config_1 = require('./config');
+require('./polyfills');
 function createApp(context, options) {
     // assign context
     config_1.default.context = context;
     config_1.default.loadingComponent = options.loadingComponent;
     config_1.default.apolloClient = options.apolloClient;
-    return mantra_core_1.createApp(context);
+    config_1.default.store = options.store;
+    // return createMantraApp(context);
 }
 exports.createApp = createApp;
 var connect_1 = require('./connect');
 exports.connect = connect_1.default;
-var compose_1 = require('./compose');
-exports.compose = compose_1.default;
-var mantra_core_2 = require('mantra-core');
-exports.composeAll = mantra_core_2.composeAll;
+// export { default as compose } from './compose';
+// export { composeAll } from 'mantra-core';
 var mutation_1 = require('./mutation');
 exports.mutation = mutation_1.default;
 var query_1 = require('./query');
 exports.query = query_1.default;
+var watch_query_1 = require('./watch_query');
+exports.watchQuery = watch_query_1.default;
 var loading_container_1 = require('./loading_container');
 exports.loadingContainer = loading_container_1.loadingContainer;
+var loader_container_1 = require('./loader_container');
+exports.loaderContainer = loader_container_1.default;
 var reducer_extensions_1 = require('./reducer_extensions');
 exports.isQuery = reducer_extensions_1.isQuery;
 exports.getQuery = reducer_extensions_1.getQuery;

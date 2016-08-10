@@ -9,13 +9,22 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 };
 var React = require('react');
 var config_1 = require('./config');
-function loadingContainer(Component, LoadingView, keys) {
+var helpers_1 = require('./helpers');
+function loadingContainer(Component, LoadingView, keys, waitForAll) {
     if (keys === void 0) { keys = ['data']; }
+    if (waitForAll === void 0) { waitForAll = true; }
     if (Array.isArray(LoadingView)) {
         keys = LoadingView;
         LoadingView = null;
     }
     return function (props) {
+        // check if all queries has finished
+        if (waitForAll && config_1.default.store) {
+            if (!helpers_1.queriesFinished(config_1.default.store.getState().apollo)) {
+                return LoadingView ? React.createElement(LoadingView, __assign({}, props)) : React.createElement(config_1.default.loadingComponent, __assign({}, props));
+            }
+        }
+        // wait for individual queries
         for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
             var key = keys_1[_i];
             if (!props[key]) {

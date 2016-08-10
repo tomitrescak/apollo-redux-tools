@@ -1,11 +1,15 @@
-let queries = '';
-let mutations = '';
-const schema = [];
-const resolver = {};
-export function schemas() { return schema; }
-export function resolvers() { return resolver; }
-export function processSchema(apolloDefinitions, show) {
-    for (let apolloDefinition of apolloDefinitions) {
+"use strict";
+var queries = '';
+var mutations = '';
+var schema = [];
+var resolver = {};
+function schemas() { return schema; }
+exports.schemas = schemas;
+function resolvers() { return resolver; }
+exports.resolvers = resolvers;
+function processSchema(apolloDefinitions) {
+    for (var _i = 0, apolloDefinitions_1 = apolloDefinitions; _i < apolloDefinitions_1.length; _i++) {
+        var apolloDefinition = apolloDefinitions_1[_i];
         if (apolloDefinition.schema) {
             schema.push(apolloDefinition.schema);
         }
@@ -32,22 +36,11 @@ export function processSchema(apolloDefinitions, show) {
         }
     }
     // add all the queries and mutations
-    queries = `
-    type RootQuery {
-      ${queries}
-    }
-    `;
+    queries = "\n    type RootQuery {\n      " + queries + "\n    }\n    ";
     schema.push(queries);
     if (mutations) {
-        mutations = `
-    type RootMutation {
-      ${mutations}
-    }
-    `;
+        mutations = "\n    type RootMutation {\n      " + mutations + "\n    }\n    ";
         schema.push(mutations);
     }
-
-    if (show) {
-        console.log(JSON.stringify(schema, null, 2).replace(/\\n/g, "\n"))
-    }
 }
+exports.processSchema = processSchema;

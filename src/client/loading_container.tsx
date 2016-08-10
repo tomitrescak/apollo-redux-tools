@@ -10,9 +10,10 @@ export function loadingContainer(Component: React.StatelessComponent<any>, Loadi
 
   return (props: any) => {
     // check if all queries has finished
+
     if (waitForAll && config.store) {
       if (!queriesFinished(config.store.getState().apollo)) {
-        return LoadingView ?  <LoadingView {...props} /> : <config.loadingComponent {...props} />;
+        return LoadingView ? <LoadingView {...props} /> : <config.loadingComponent {...props} />;
       }
     }
 
@@ -44,11 +45,11 @@ export function loadingContainer(Component: React.StatelessComponent<any>, Loadi
         }
       }
       if (props[key].loading) {
-        return LoadingView ?  <LoadingView {...props} /> : <config.loadingComponent {...props} />;
+        return LoadingView ? <LoadingView {...props} /> : <config.loadingComponent {...props} />;
       }
     }
     try {
-      return <Component {...props} /> ;
+      return <Component {...props} />;
     } catch (ex) {
       console.error(ex.stack);
       throw ex;

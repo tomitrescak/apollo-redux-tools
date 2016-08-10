@@ -2,7 +2,7 @@
 var config_1 = require('./config');
 var mutation_1 = require('./mutation');
 function default_1(_a) {
-    var query = _a.query, variables = _a.variables, optimisticCallback = _a.optimisticCallback, thenCallback = _a.thenCallback, errorCallback = _a.errorCallback, catchCallback = _a.catchCallback;
+    var query = _a.query, variables = _a.variables, optimisticCallback = _a.optimisticCallback, thenCallback = _a.thenCallback, errorCallback = _a.errorCallback, catchCallback = _a.catchCallback, finalCallback = _a.finalCallback;
     return function (dispatch, state) {
         if (optimisticCallback) {
             optimisticCallback(dispatch, state);
@@ -20,12 +20,25 @@ function default_1(_a) {
                 errorCallback(errors, dispatch, state);
                 console.error(errors);
             }
+            if (finalCallback) {
+                finalCallback(dispatch, state);
+            }
         }).catch(function (error) {
             mutation_1.showMessage('Error', error);
             if (catchCallback) {
                 catchCallback(error, dispatch, state);
             }
-            console.error(error);
+            if (error.networkError) {
+                console.error(error.networkError);
+                console.error(error.networkError.stack);
+            }
+            else {
+                console.error(error);
+                console.error(error.stack);
+            }
+            if (finalCallback) {
+                finalCallback(dispatch, state);
+            }
         });
         return null;
         var _a;

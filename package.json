@@ -1,8 +1,8 @@
 {
   "name": "apollo-mantra",
-  "version": "1.0.11",
+  "version": "1.0.26",
   "description": "Tools for integration of apollo with Mantra",
-  "main": "./dist-client/index.js",
+  "main": "./dist/client/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

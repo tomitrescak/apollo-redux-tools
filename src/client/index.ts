@@ -1,5 +1,6 @@
 // import { createApp as createMantraApp } from 'mantra-core';
 import config from './config';
+import './polyfills';
 
 export function createApp(context: any, options: { loadingComponent: any, apolloClient: any, store: any }) {
   // assign context
@@ -16,6 +17,8 @@ export { default as connect } from './connect';
 // export { composeAll } from 'mantra-core';
 export { default as mutation } from './mutation';
 export { default as query } from './query';
+export { default as watchQuery } from './watch_query';
 export { loadingContainer } from './loading_container';
+export { default as loaderContainer } from './loader_container';
 export { isQuery, getQuery, isMutation, getMutation, copyQuery } from './reducer_extensions';
 export { queriesFinished } from './helpers';

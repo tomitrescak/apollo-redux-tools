@@ -71,25 +71,31 @@ function copyQuery(state, stateKey, queryResult, queryKey, overwrite) {
     if (queryKey === void 0) { queryKey = '_id'; }
     if (overwrite === void 0) { overwrite = true; }
     if (queryResult) {
-        // query maps
-        var newKeys_1 = Object.assign({}, state[stateKey]);
-        // copy all results to the new state
-        if (Array.isArray(queryResult)) {
-            queryResult.forEach(function (e) {
-                if (overwrite || !newKeys_1[e[queryKey]]) {
-                    newKeys_1[e[queryKey]] = stripTypeNames(e);
+        var newKeys_1 = queryResult;
+        if (queryKey) {
+            // query maps
+            newKeys_1 = Object.assign({}, state[stateKey]);
+            // copy all results to the new state
+            if (Array.isArray(queryResult)) {
+                if (queryResult.length === 0) {
+                    return state;
                 }
-            });
-        }
-        else {
-            if (overwrite || !newKeys_1[queryResult[queryKey]]) {
-                newKeys_1[queryResult[queryKey]] = stripTypeNames(queryResult);
+                queryResult.forEach(function (e) {
+                    if (overwrite || !newKeys_1[e[queryKey]]) {
+                        newKeys_1[e[queryKey]] = stripTypeNames(e);
+                    }
+                });
+            }
+            else {
+                if (overwrite || !newKeys_1[queryResult[queryKey]]) {
+                    newKeys_1[queryResult[queryKey]] = stripTypeNames(queryResult);
+                }
             }
         }
         return Object.assign({}, state, (_a = {}, _a[stateKey] = newKeys_1, _a));
     }
     else {
-        console.warn('When copying query, there was no result for: ' + stateKey);
+        // console.warn('When copying query, there was no result for: ' + stateKey);
         return state;
     }
     var _a;
