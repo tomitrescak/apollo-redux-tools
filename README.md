@@ -16,7 +16,7 @@ In `apollo-mantra` schemas are divided by `domain` definitions. Each domain elem
 the definition of it schema along with all queries, resolvers and mutations. Following is 
 the definition of domain element schema:
 
-```typescript
+```js
 declare interface IApolloQueryDefinition {
   schema: string;
   queryText?: string;
@@ -44,7 +44,7 @@ Following is a list of helpers:
 
 These helpers provide a possibility to define queries and mutations in object format, which facilitates the code readibility. Following is the structure of the query.
 
-```typescript
+```js
 interface IQuery {
   query: string;
   variables?: Object;
@@ -98,7 +98,7 @@ List of examples of common uses of our helpers
 
 ## Simple schema<a name="schema" id="schema"></a>
 
-```typescript
+```js
 import { Mongo } from 'meteor/mongo';
 import { Exercises } from './exercise_schema';
 
@@ -146,7 +146,7 @@ export default definition;
 
 ## Schema with input/output elements <a name="schema" id="ioschema"></a>
 
-```typescript
+```js
 import { Mongo } from 'meteor/mongo';
 import { Random } from 'meteor/random';
 import { ioSchema } from 'apollo-mantra/server';
@@ -326,7 +326,7 @@ export default definition;
 
 This is how you can generate a schema for Apollo Server
 
-```typescript
+```js
 import { processSchema } from 'apollo-mantra/server';
 
 // process all
@@ -386,7 +386,7 @@ export default function() {
 
 This is how you can copy apollo query results to the store. 
 
-```typescript
+```js
 import { getQuery, copyQuery } from 'apollo-mantra';
 import update from 'react-addons-update';
 
