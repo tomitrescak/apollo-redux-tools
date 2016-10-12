@@ -8,8 +8,6 @@ It allows you to:
 2. Copy query results to redux store for easier optimistic callbacks
 3. Use higer order elements to display messages based on query easier
 
-
-
 # Server
 
 The server functionality has been moved to: [apollo-modules](https://www.npmjs.com/package/apollo-modules)
@@ -24,7 +22,7 @@ Following is a list of helpers:
 
 These helpers provide a possibility to define queries and mutations in object format, which facilitates the code readibility. Following is the structure of the query.
 
-```typescript
+```js
 interface IQuery {
   query: string;
   variables?: Object;
@@ -80,7 +78,7 @@ List of examples of common uses of our helpers
 
 This is how you can copy apollo query results to the store.
 
-```typescript
+```js
 import { getQuery, copyQuery } from 'apollo-mantra';
 import update from 'react-addons-update';
 
