@@ -1,6 +1,5 @@
 import config from './config';
-import sweetalert from 'sweetalert2';
-import { showMessage } from './mutation';
+
 declare var gql: any;
 
 
@@ -20,8 +19,8 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
       optimisticCallback(dispatch, state);
     }
 
-    config.apolloClient.query({
-      query: gql`${query}`,
+    config.apolloClient.mutate({
+      mutation: gql`${query}`,
       variables: variables
     }).then((graphQLResult: any) => {
       const { errors, data } = graphQLResult;
@@ -30,30 +29,33 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
         thenCallback(data, dispatch, state);
       }
 
-      if (errors && errorCallback) {
-        showMessage('Error', errors);
-        errorCallback(errors, dispatch, state);
+      if (errors) {
+        // showMessage('Error', errors.map((e: any) => e.message).join('\n'));
         console.error(errors);
+        if (errorCallback) {
+          errorCallback(errors, dispatch, state);
+        }
       }
 
       if (finalCallback) {
         finalCallback(dispatch, state);
       }
     }).catch((error: any) => {
-      showMessage('Error', error);
+      // showMessage('Error', error.message ? (error.message + error.stack) : error);
       if (catchCallback) {
         catchCallback(error, dispatch, state);
-      }
-
-      if (error.networkError) {
-        console.error(error.networkError);
-        console.error(error.networkError.stack);
       } else {
-        console.error(error);
-        console.error(error.stack);
+        console.group('Apollo Error');
+        console.error(error.message);
+        if (error.networkError) {
+          console.error(error.networkError);
+          console.error(error.networkError.stack);
+        } else {
+          console.error(error);
+          console.error(error.stack);
+        }
+        console.groupEnd();
       }
-
-      
 
       if (finalCallback) {
         finalCallback(dispatch, state);

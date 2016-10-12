@@ -1,5 +1,6 @@
 import { connect as apolloConnect } from 'react-apollo';
 import { connect as reduxConnect } from 'react-redux';
+
 import config from './config';
 
 interface IConnectFunctions {

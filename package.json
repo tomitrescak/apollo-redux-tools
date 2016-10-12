@@ -1,10 +1,10 @@
 {
   "name": "apollo-mantra",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Tools for integration of apollo with Mantra",
-  "main": "./dist/client/index.js",
+  "main": "./dist/index.js",
   "repository": {
-    "url": "https://github.com/tomitrescak/apollo-redux-tools"    
+    "url": "https://github.com/tomitrescak/apollo-redux-tools"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -32,8 +32,8 @@
   "filesGlob": [
     "../typings/*.ts",
     "!./node_modules/**",
-    "*.ts",
-    "*.tsx"
+    "./**/*.ts",
+    "./**/*.tsx"
   ],
   "exclude": [
     "node_modules",

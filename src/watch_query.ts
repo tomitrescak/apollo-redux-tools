@@ -1,6 +1,4 @@
 import config from './config';
-import sweetalert from 'sweetalert2';
-import { showMessage } from './mutation';
 declare var gql: any;
 
 interface IWatchQuery {
@@ -46,7 +44,7 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
         }
 
         if (errors && errorCallback) {
-          showMessage('Error', errors);
+          // showMessage('Error', errors);
           errorCallback(errors, dispatch, state);
           console.error(errors);
         }
@@ -56,7 +54,7 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
         }
       },
       error: (error: any) => {
-        showMessage('Error', error);
+        // showMessage('Error', error);
         if (catchCallback) {
           catchCallback(error, dispatch, state);
         }

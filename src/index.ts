@@ -2,6 +2,12 @@
 import config from './config';
 import './polyfills';
 
+declare global {
+  export interface ObjectConstructor {
+    assign(el: any, ...els: any[]): any;
+  }
+}
+
 export function createApp(context: any, options: { loadingComponent: any, apolloClient: any, store: any }) {
   // assign context
   config.context = context;

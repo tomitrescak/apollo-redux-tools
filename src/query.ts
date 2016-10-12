@@ -1,8 +1,6 @@
 import config from './config';
-import sweetalert from 'sweetalert2';
-
+import { showMessage } from './mutation';
 declare var gql: any;
-
 
 interface IMutation {
   query: string;
@@ -20,8 +18,8 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
       optimisticCallback(dispatch, state);
     }
 
-    config.apolloClient.mutate({
-      mutation: gql`${query}`,
+    config.apolloClient.query({
+      query: gql`${query}`,
       variables: variables
     }).then((graphQLResult: any) => {
       const { errors, data } = graphQLResult;
@@ -30,24 +28,31 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
         thenCallback(data, dispatch, state);
       }
 
-      if (errors) {
-        showMessage('Error', errors.map((e: any) => e.message).join('\n'));
+      if (errors && errorCallback) {
+        // showMessage('Error', errors);
+        errorCallback(errors, dispatch, state);
         console.error(errors);
-        if (errorCallback) {
-          errorCallback(errors, dispatch, state);
-        }
       }
 
       if (finalCallback) {
         finalCallback(dispatch, state);
       }
     }).catch((error: any) => {
-      showMessage('Error', error.message ? (error.message + error.stack) : error);
+      // showMessage('Error', error);
       if (catchCallback) {
         catchCallback(error, dispatch, state);
       }
-      console.error(error);
-      console.error(error.stack);
+
+      console.group('Apollo Error');
+      console.error(error.message);
+      if (error.networkError) {
+        console.error(error.networkError);
+        console.error(error.networkError.stack);
+      } else {
+        console.error(error);
+        console.error(error.stack);
+      }
+      console.groupEnd();
 
       if (finalCallback) {
         finalCallback(dispatch, state);
@@ -55,12 +60,4 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
     });
     return null;
   };
-}
-
-export function showMessage(title: string, text: string, type: any = 'error') {
-  if (sweetalert) {
-    sweetalert({title: title, text: text, type: type, confirmButtonText: 'OK' });
-  } else {
-    alert(`${title}: ${text}`);
-  }
 }
