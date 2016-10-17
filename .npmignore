@@ -1,0 +1,5 @@
+node_modules
+src
+.vscode
+.npmignore
+tslint.json

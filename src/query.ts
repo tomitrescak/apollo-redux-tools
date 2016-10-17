@@ -1,18 +1,17 @@
 import config from './config';
-import { showMessage } from './mutation';
 declare var gql: any;
 
-interface IMutation {
+export interface IQuery {
   query: string;
-  variables: Object;
-  optimisticCallback: (dispatch: Function, state: () => any) => void;
-  thenCallback: (data: any, dispatch: Function, state: () => any) => void;
-  errorCallback: (errors: any, dispatch: Function, state: () => any) => void;
-  catchCallback: (error: any, dispatch: Function, state: () => any) => void;
-  finalCallback: (dispatch: Function, state: () => any) => void;
+  variables?: Object;
+  optimisticCallback?: (dispatch: Function, state: () => any) => void;
+  thenCallback?: (data: any, dispatch: Function, state: () => any) => void;
+  errorCallback?: (errors: any, dispatch: Function, state: () => any) => void;
+  catchCallback?: (error: any, dispatch: Function, state: () => any) => void;
+  finalCallback?: (dispatch: Function, state: () => any) => void;
 }
 
-export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback }: IMutation) {
+export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback }: IQuery) {
   return (dispatch: Function, state: () => any): any => {
     if (optimisticCallback) {
       optimisticCallback(dispatch, state);

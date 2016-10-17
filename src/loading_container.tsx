@@ -2,7 +2,7 @@ import * as React from 'react';
 import config from './config';
 import { queriesFinished } from './helpers';
 
-export function loadingContainer(Component: React.StatelessComponent<any>, LoadingView: React.StatelessComponent<any>, keys: any = ['data'], waitForAll = true) {
+export function loadingContainer(Component: any, LoadingView?: any, keys: any = ['data'], waitForAll = true) {
   if (Array.isArray(LoadingView)) {
     keys = LoadingView;
     LoadingView = null;

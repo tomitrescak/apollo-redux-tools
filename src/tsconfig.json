@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "declaration": false,
+    "declaration": true,
     "noImplicitAny": true,
     "removeComments": false,
     "noLib": false,
@@ -14,7 +14,7 @@
     "experimentalDecorators": true,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "classic"
+    "moduleResolution": "node"
   },
   "formatCodeOptions": {
     "indentSize": 2,

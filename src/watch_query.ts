@@ -1,7 +1,7 @@
 import config from './config';
 declare var gql: any;
 
-interface IWatchQuery {
+export interface IWatchQuery {
   query: string;
   variables: Object;
   pollInterval: number;
@@ -14,7 +14,7 @@ interface IWatchQuery {
   finalCallback: (dispatch: Function, state: () => any) => void;
 }
 
-interface ISubscription {
+export interface ISubscription {
   refetch(vas: Object): void;
   unsubscribe(): void;
   stopPolling(): void;

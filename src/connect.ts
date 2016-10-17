@@ -1,9 +1,8 @@
-import { connect as apolloConnect } from 'react-apollo';
 import { connect as reduxConnect } from 'react-redux';
 
 import config from './config';
 
-interface IConnectFunctions {
+export interface IConnectFunctions {
   mapStateToProps?: Function;
   mapDispatchToProps?: Function;
   mapQueriesToProps?: Function;
@@ -15,9 +14,8 @@ interface IConnectFunctions {
   };
 }
 
-export default function connectWithContext(props: IConnectFunctions): any {
+export default function connectWithContext<T>(props: IConnectFunctions): (component: any) => React.StatelessComponent<T> {
   const modified = {};
-  let needsApollo = false;
 
   if (props.mapStateToProps) {
     modified['mapStateToProps'] = (state: any, ownProps: any) => props.mapStateToProps(config.context, state, ownProps);
@@ -28,15 +26,6 @@ export default function connectWithContext(props: IConnectFunctions): any {
   if (props.mergeProps) {
     modified['mergeProps'] = (state: any, ownProps: any) => props.mergeProps(config.context, state, ownProps);
   }
-  if (props.mapQueriesToProps) {
-    needsApollo = true;
-    modified['mapQueriesToProps'] = (state: any, ownProps: any) => props.mapQueriesToProps(config.context, state, ownProps);
-  }
-  if (props.mapMutationsToProps) {
-    needsApollo = true;
-    modified['mapMutationsToProps'] = (state: any, ownProps: any) => props.mapMutationsToProps(config.context, state, ownProps);
-  }
-  return needsApollo ?
-    apolloConnect(modified) :
-    reduxConnect(modified['mapStateToProps'], modified['mapDispatchToProps'], modified['mergeProps'], props.options);
+
+  return reduxConnect(modified['mapStateToProps'], modified['mapDispatchToProps'], modified['mergeProps'], props.options);
 }
