@@ -8,7 +8,7 @@ export function loadingContainer(Component: any, LoadingView?: any, keys: any = 
     LoadingView = null;
   }
 
-  return (props: any) => {
+  const Loader = (props: any) => {
     // check if all queries has finished
 
     if (waitForAll && config.store) {
@@ -20,7 +20,7 @@ export function loadingContainer(Component: any, LoadingView?: any, keys: any = 
     // wait for individual queries
     for (let key of keys) {
       if (!props[key]) {
-        console.error('Key does not exist in the apollo result set: ' + key);
+        console.error('Loading container did not find key in the apollo result set: ' + key);
       }
 
       if (props[key].errors) {
@@ -55,4 +55,8 @@ export function loadingContainer(Component: any, LoadingView?: any, keys: any = 
       throw ex;
     }
   };
+
+  Loader['displayName'] = 'LoadingContainer';
+
+  return Loader;
 };

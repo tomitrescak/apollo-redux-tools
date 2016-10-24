@@ -3,6 +3,8 @@
 ///////////////////////////////////////////////////////////////
 
 declare module 'mantra-core' {
+  import React from 'react';
+  
   interface IKomposer {
     (params: Object, onData: Function): Function;
   }
