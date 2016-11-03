@@ -1,6 +1,6 @@
 {
   "name": "apollo-mantra",
-  "version": "1.1.11",
+  "version": "1.2.0",
   "description": "Tools for integration of apollo with Mantra",
   "main": "./dist/index.js",
   "repository": {
@@ -21,6 +21,7 @@
     "react-apollo": "^0.5.11"
   },
   "devDependencies": {
+    "@types/react": "^0.14.44",
     "apollo-client": "^0.4.21",
     "graphql": "^0.7.2"
   }
