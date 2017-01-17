@@ -1,21 +1,20 @@
+import { ApolloError, createError, log } from './error_logger';
+
+import { GraphQLResult } from 'graphql/graphql';
 import config from './config';
 
-declare var gql: any;
-
 export interface IMutation {
-  query: string;
+  query: any;
+  name?: string;
   variables?: Object;
   optimisticCallback?: (dispatch: Function, state: () => any) => void;
   thenCallback?: (data: any, dispatch: Function, state: () => any) => void;
-  errorCallback?: (errors: any, dispatch: Function, state: () => any) => void;
-  catchCallback?: (error: any, dispatch: Function, state: () => any) => void;
+  catchCallback?: (error: ApolloError, dispatch: Function, state: () => any) => void;
   finalCallback?: (dispatch: Function, state: () => any) => void;
   optimisticResponse?: any;
 }
 
-const regexp = /mutation ([\w_]*)/;
-
-export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback, optimisticResponse }: IMutation) {
+export default function({ query, name, variables, optimisticCallback, thenCallback, catchCallback, finalCallback, optimisticResponse }: IMutation) {
   return (dispatch: Function, state: () => any): any => {
     if (optimisticCallback) {
       optimisticCallback(dispatch, state);
@@ -23,48 +22,36 @@ export default function({ query, variables, optimisticCallback, thenCallback, er
 
     let optimistic: any = null;
     if (optimisticResponse) {
-      const mutationName = regexp.exec(query)[1];
+      if (!name) {
+        throw new Error('apollo-mantra: Please specify mutation name if you want to use optimistic callbacks!');
+      }
       optimistic = { __typename: 'Mutation' };
-      optimistic[mutationName] = optimisticResponse;
+      optimistic[name] = optimisticResponse;
     }
 
     config.apolloClient.mutate({
-      mutation: gql`${query}`,
+      mutation: query,
       variables: variables,
       optimisticResponse: optimistic
-    }).then((graphQLResult: any) => {
+    }).then((graphQLResult: GraphQLResult) => {
       const { errors, data } = graphQLResult;
-
-      if (data && thenCallback) {
-        thenCallback(data, dispatch, state);
-      }
 
       if (errors) {
         // showMessage('Error', errors.map((e: any) => e.message).join('\n'));
-        console.error(errors);
-        if (errorCallback) {
-          errorCallback(errors, dispatch, state);
-        }
+        catchCallback(createError(errors), dispatch, state);
+      } else if (data && thenCallback) {
+        thenCallback(data, dispatch, state);
       }
 
       if (finalCallback) {
         finalCallback(dispatch, state);
       }
-    }).catch((error: any) => {
+    }).catch((error: ApolloError) => {
       // showMessage('Error', error.message ? (error.message + error.stack) : error);
       if (catchCallback) {
         catchCallback(error, dispatch, state);
       } else {
-        console.group('Apollo Error');
-        console.error(error.message);
-        if (error.networkError) {
-          console.error(error.networkError);
-          console.error(error.networkError.stack);
-        } else {
-          console.error(error);
-          console.error(error.stack);
-        }
-        console.groupEnd();
+        log(error);
       }
 
       if (finalCallback) {

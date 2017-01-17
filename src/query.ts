@@ -1,62 +1,50 @@
+import { ApolloError, createError, log } from './error_logger';
+
+import { GraphQLResult } from 'graphql/graphql';
 import config from './config';
-declare var gql: any;
 
 export interface IQuery {
-  query: string;
+  context: any;
+  query: any;
   variables?: Object;
-  optimisticCallback?: (dispatch: Function, state: () => any) => void;
-  thenCallback?: (data: any, dispatch: Function, state: () => any) => void;
-  errorCallback?: (errors: any, dispatch: Function, state: () => any) => void;
-  catchCallback?: (error: any, dispatch: Function, state: () => any) => void;
-  finalCallback?: (dispatch: Function, state: () => any) => void;
+  optimisticCallback?: (state: any) => void;
+  thenCallback?: (data: any, state: any) => void;
+  catchCallback?: (error: ApolloError, state: any) => void;
+  finalCallback?: (state: any) => void;
 }
 
-export default function({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback }: IQuery) {
-  return (dispatch: Function, state: () => any): any => {
-    if (optimisticCallback) {
-      optimisticCallback(dispatch, state);
+export default function({ context, query, variables, optimisticCallback, thenCallback, catchCallback, finalCallback }: IQuery) {
+  const state = context.state;
+  if (optimisticCallback) {
+    optimisticCallback(state);
+  }
+
+  config.apolloClient.mutate({
+    mutation: query,
+    variables: variables
+  }).then((graphQLResult: GraphQLResult) => {
+    const { errors, data } = graphQLResult;
+
+    if (errors) {
+      // showMessage('Error', errors.map((e: any) => e.message).join('\n'));
+      catchCallback(createError(errors), state);
+    } else if (data && thenCallback) {
+      thenCallback(data, state);
     }
 
-    config.apolloClient.query({
-      query: gql`${query}`,
-      variables: variables
-    }).then((graphQLResult: any) => {
-      const { errors, data } = graphQLResult;
+    if (finalCallback) {
+      finalCallback(state);
+    }
+  }).catch((error: ApolloError) => {
+    // showMessage('Error', error.message ? (error.message + error.stack) : error);
+    if (catchCallback) {
+      catchCallback(error, state);
+    } else {
+      log(error);
+    }
 
-      if (data && thenCallback) {
-        thenCallback(data, dispatch, state);
-      }
-
-      if (errors && errorCallback) {
-        // showMessage('Error', errors);
-        errorCallback(errors, dispatch, state);
-        console.error(errors);
-      }
-
-      if (finalCallback) {
-        finalCallback(dispatch, state);
-      }
-    }).catch((error: any) => {
-      // showMessage('Error', error);
-      if (catchCallback) {
-        catchCallback(error, dispatch, state);
-      }
-
-      console.group('Apollo Error');
-      console.error(error.message);
-      if (error.networkError) {
-        console.error(error.networkError);
-        console.error(error.networkError.stack);
-      } else {
-        console.error(error);
-        console.error(error.stack);
-      }
-      console.groupEnd();
-
-      if (finalCallback) {
-        finalCallback(dispatch, state);
-      }
-    });
-    return null;
-  };
+    if (finalCallback) {
+      finalCallback(state);
+    }
+  });
 }
