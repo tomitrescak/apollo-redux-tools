@@ -1,6 +1,7 @@
 import * as React from 'react';
 import config from './config';
 import { queriesFinished } from './helpers';
+import { QueryProps, MutationFunc } from 'react-apollo';
 
 export interface Options {
   waitForAll?: boolean;
@@ -12,8 +13,13 @@ export interface Options {
   // validation?<C> (props: any, context: any, keys?: string[], options?: Options): React.StatelessComponent<C>;
 }
 
-export default function connect<C>(keys: string[] = ['data'], options: Options = {}) {
-  return function wait<P>(WrappedComponent: React.ComponentClass<P> | React.StatelessComponent<P>): React.StatelessComponent<C> {
+export interface WaitData<D> {
+  data: QueryProps & D;
+  mutate: MutationFunc<D>;
+};
+
+export default function waitForData<C, D = {}>(keys: string[] = ['data'], options: Options = {}) {
+  return function wait<P>(WrappedComponent: React.ComponentClass<P> | React.StatelessComponent<P>): React.StatelessComponent<D & WaitData<C>> {
 
     const func = (props: any, context: any) => {
       const Loading =  options.LoadingView ? options.LoadingView : config.loadingComponent;

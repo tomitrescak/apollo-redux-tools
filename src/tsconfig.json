@@ -14,7 +14,9 @@
     "experimentalDecorators": true,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
   },
   "formatCodeOptions": {
     "indentSize": 2,

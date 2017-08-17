@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ApolloClient from 'apollo-client';
 
 const defaultComponent: React.StatelessComponent<any> =
   (props: any): any => {
@@ -9,7 +10,7 @@ export interface GlobalOptions {
   loadingComponent: React.StatelessComponent<any>;
   authComponent: React.StatelessComponent<any>;
   LoggingIn: React.StatelessComponent<any>;
-  apolloClient: any;
+  apolloClient: ApolloClient;
   contextTypes: Object;
   store: any;
   isLoggingIn? (context: any): boolean;

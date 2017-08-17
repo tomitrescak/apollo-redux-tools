@@ -15,10 +15,7 @@ export interface IWatchQuery {
 }
 
 export interface ISubscription {
-  refetch(vas: Object): void;
   unsubscribe(): void;
-  stopPolling(): void;
-  startPolling(pollInterval: number): void;
 }
 
 export default function ({ query, variables, optimisticCallback, thenCallback, errorCallback, catchCallback, finalCallback, forceFetch, pollInterval, returnPartialData }: IWatchQuery) {
@@ -30,9 +27,7 @@ export default function ({ query, variables, optimisticCallback, thenCallback, e
     const observer = config.apolloClient.watchQuery({
       query: gql`${query}`,
       variables: variables,
-      forceFetch,
-      pollInterval,
-      returnPartialData
+      pollInterval
     });
 
     const subscription = observer.subscribe({

@@ -1,14 +1,12 @@
-import { ApolloError, createError, log } from './error_logger';
-
-import { GraphQLResult } from 'graphql/graphql';
+import { ApolloError } from './error_logger';
 import config from './config';
 
 export interface IMutation {
-  context: any;
+  context?: any;
   query: any;
   name?: string;
   variables?: Object;
-  updateQueries?: Object;
+  updateQueries?: any;
   optimisticCallback?: (state: any, context: any) => void;
   thenCallback?: (data: any, state: any, context: any) => void;
   catchCallback?: (error: ApolloError, state: any, context: any) => void;
@@ -16,7 +14,7 @@ export interface IMutation {
   optimisticResponse?: any;
 }
 
-export default function ({ context, query, name, variables, updateQueries, optimisticCallback, thenCallback, catchCallback, finalCallback, optimisticResponse }: IMutation): void {
+export default function ({ context, query, name, variables, updateQueries, optimisticCallback, thenCallback, catchCallback, finalCallback, optimisticResponse }: IMutation) {
   const state = context ? context.state : null;
 
   if (optimisticCallback) {
@@ -32,35 +30,38 @@ export default function ({ context, query, name, variables, updateQueries, optim
     optimistic[name] = optimisticResponse;
   }
 
-  config.apolloClient.mutate({
-    mutation: query,
-    variables: variables,
-    optimisticResponse: optimistic,
-    updateQueries: updateQueries,
-  }).then((graphQLResult: GraphQLResult) => {
-    const { errors, data } = graphQLResult;
+  return new Promise((resolve, reject) => {
+    config.apolloClient
+      .mutate({
+        mutation: query,
+        variables: variables,
+        optimisticResponse: optimistic,
+        updateQueries: updateQueries
+      })
+      .then(graphQLResult => {
+        const { data } = graphQLResult;
 
-    if (errors) {
-      // showMessage('Error', errors.map((e: any) => e.message).join('\n'));
-      log(createError(errors));
-      catchCallback(createError(errors), state, context);
-    } else if (data && thenCallback) {
-      thenCallback(data, state, context);
-    }
+        if (data && thenCallback) {
+          thenCallback(data, state, context);
+        }
 
-    if (finalCallback) {
-      finalCallback(state, context);
-    }
-  }).catch((error: ApolloError) => {
-    // showMessage('Error', error.message ? (error.message + error.stack) : error);
-    log(error);
-    if (catchCallback) {
-      catchCallback(error, state, context);
-    }
-
-    if (finalCallback) {
-      finalCallback(state, context);
-    }
+        if (finalCallback) {
+          finalCallback(state, context);
+        }
+        resolve(graphQLResult);
+      })
+      .catch((error: ApolloError) => {
+        // showMessage('Error', error.message ? (error.message + error.stack) : error);
+        // log(error);
+        // context.Utils.log.error(error);
+        if (catchCallback) {
+          catchCallback(error, state, context);
+        }
+        if (finalCallback) {
+          finalCallback(state, context);
+        }
+        reject(error);
+      });
   });
 };
 

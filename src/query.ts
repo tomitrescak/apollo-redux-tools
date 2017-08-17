@@ -1,50 +1,57 @@
-import { ApolloError, createError, log } from './error_logger';
-
-import { GraphQLResult } from 'graphql/graphql';
+import { ApolloError } from './error_logger';
 import config from './config';
+import { ApolloClient } from 'apollo-client';
 
 export interface IQuery {
-  context: any;
+  client?: ApolloClient;
+  context?: any;
   query: any;
+  name?: string;
   variables?: Object;
-  optimisticCallback?: (state: any) => void;
-  thenCallback?: (data: any, state: any) => void;
-  catchCallback?: (error: ApolloError, state: any) => void;
-  finalCallback?: (state: any) => void;
+  thenCallback?: (data: any, state: any, context: any) => void;
+  catchCallback?: (error: ApolloError, state: any, context: any) => void;
+  finalCallback?: (state: any, context: any) => void;
 }
 
-export default function({ context, query, variables, optimisticCallback, thenCallback, catchCallback, finalCallback }: IQuery) {
-  const state = context.state;
-  if (optimisticCallback) {
-    optimisticCallback(state);
-  }
+export default function({
+  context,
+  query,
+  variables,
+  thenCallback,
+  catchCallback,
+  finalCallback,
+  client = config.apolloClient
+}: IQuery) {
+  const state = context ? context.state : null;
+  return new Promise((resolve, reject) => {
+    client
+      .query({
+        query,
+        variables: variables
+      })
+      .then(graphQLResult => {
+        const { data } = graphQLResult;
 
-  config.apolloClient.mutate({
-    mutation: query,
-    variables: variables
-  }).then((graphQLResult: GraphQLResult) => {
-    const { errors, data } = graphQLResult;
+        if (data && thenCallback) {
+          thenCallback(data, state, context);
+        }
 
-    if (errors) {
-      // showMessage('Error', errors.map((e: any) => e.message).join('\n'));
-      catchCallback(createError(errors), state);
-    } else if (data && thenCallback) {
-      thenCallback(data, state);
-    }
-
-    if (finalCallback) {
-      finalCallback(state);
-    }
-  }).catch((error: ApolloError) => {
-    // showMessage('Error', error.message ? (error.message + error.stack) : error);
-    if (catchCallback) {
-      catchCallback(error, state);
-    } else {
-      log(error);
-    }
-
-    if (finalCallback) {
-      finalCallback(state);
-    }
+        if (finalCallback) {
+          finalCallback(state, context);
+        }
+        resolve(graphQLResult);
+      })
+      .catch((error: ApolloError) => {
+        // showMessage('Error', error.message ? (error.message + error.stack) : error);
+        // log(error);
+        // context.Utils.log.error(error);
+        if (catchCallback) {
+          catchCallback(error, state, context);
+        }
+        if (finalCallback) {
+          finalCallback(state, context);
+        }
+        reject(error);
+      });
   });
 }
